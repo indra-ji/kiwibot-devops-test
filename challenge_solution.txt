@@ -43,16 +43,16 @@ INITIAL DEPLOYMENT INTO PRODUCTION
     gcloud config set run/region us-central1
 
 3. Creating a Memorystore instance for Redis 
-    gcloud redis instances create redis-prod --size=1 --region=us-central1
+    gcloud redis instances create redis-test --size=1 --region=us-central1
 
 4. Start a Serverless VPC Access Connector 
-    gcloud compute networks vpc-access connectors create connector-prod \
+    gcloud compute networks vpc-access connectors create connector-test \
   --region us-central1 \
   --range "10.8.0.0/28"
 
 5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
-     export REDISHOST=$(gcloud redis instances describe redis-prod --region us-central1 --format "value(host)")
+     export REDISHOST=$(gcloud redis instances describe redis-test --region us-central1 --format "value(host)")
 
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
