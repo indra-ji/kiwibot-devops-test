@@ -12,7 +12,7 @@ SETTING UP GCP
 INITIAL DEPLOYMENT INTO TEST
 
 1. Set this project as default 
-    gcloud config set project test
+    gcloud config set project kiwibot-test
 
 2. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
@@ -34,7 +34,7 @@ authorized network.
 
 7. Build and deploy. 
     gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-prod \
+    --vpc-connector connector-test \
     --allow-unauthenticated \
     --timeout 3600 \
     --service-account chat-identity \
@@ -45,7 +45,7 @@ authorized network.
 INITIAL DEPLOYMENT INTO PRODUCTION
 
 1. Set this project as default 
-    gcloud config set project prod
+    gcloud config set project kiwibot-prod
 
 2. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
@@ -75,9 +75,9 @@ authorized network.
 
     Note: Press Y on any steps or API installs that may be necessary 
 
-DEPLOYMENT INTO TEST 
+ROLLING DEPLOYMENT INTO TEST 
 
-DEPLOYMENT INTO PRODUCTION 
+ROLLING DEPLOYMENT INTO PRODUCTION 
 
 USER TESTING 
 
