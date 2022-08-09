@@ -12,7 +12,7 @@ SETTING UP GCP
 INITIAL DEPLOYMENT INTO TEST
 
 1. Set this project as default 
-    gcloud config set project kiwibot-test-1
+    gcloud config set project kiwibot-test1
 
 2. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
@@ -45,7 +45,7 @@ authorized network.
 INITIAL DEPLOYMENT INTO PRODUCTION
 
 1. Set this project as default 
-    gcloud config set project kiwibot-prod-1
+    gcloud config set project kiwibot-prod1
 
 2. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
