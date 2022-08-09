@@ -2,58 +2,174 @@ QUESTIONS
 
 1. What is the need for DevOps in a company?
 
-DevOps lets companies move faster while making fewer mistakes. By aligning the 
-incentives between developers and operations and automating infrastructure 
-tasks end-to-end, DevOps can increase engineering velocity significantly while
-reducing human error. 
+DevOps lets companies move faster while making fewer mistakes. It does this by
+aligning the incentives between developers and operations people, automating
+build, test and deployment pipelines end-to-end, and by making the process of
+infrastructure and environment management much easier.  
 
 2. Which are the top DevOps tools? Which tools have you worked on?
 
-Some (but not all) of the most widely used DevOps tools are, 
+Some of the most widely used DevOps tools are, 
 
-- Git (source code management)
-- Jenkins (CI automation)
+- Git (version control)
+- Jenkins (automation server)
 - Docker (containerization)
 - Kubernetes (container orchestration) 
 - Chef (configuration management)
 - AWS (cloud computing) 
 - Selenium (automated testing)
 
-I have worked with Git, Docker, and AWS previously. 
+I have worked with Git, Docker, and AWS previously, and have tinkered with 
+Jenkins and Kubernetes.
 
     a. How do all these tools work together?
 
     These tools (and/or others) should fit together into one CI/CD (continuous
-    integration/continuous deployment) pipeline. In some cases, such as Docker 
-    and Kubernetes, the tools work with each other to let developers work at 
-    higher levels of abstraction. i.e. scaling up number of containers 
-    automatically along with workload, instead of setting up each container
-    manually.
+    integration/continuous deployment) pipeline, with each one taking care of 
+    one or a few steps in the pipeline.
+
+    As an example, code would be version in a dev branch using Git, where it
+    would then be pushed to a test environment and automatically tested using 
+    Jenkins. After passing automated tests, quality checks and syntax checks, 
+    it would then be moved to the production environment, containerized using
+    Docker, then deployed on AWS. This step can be automated via Jenkins or
+    similar tools, or have a human-in-the-loop for higher safety. If the
+    workload increases, then Kubernetes can be used to scale the number of
+    containers up and down. While the application code is running, a tool like
+    Datadog can be used to monitor the performance of the cloud service. Any
+    bugs or errors caught means that the process begins again, tweaking the old
+    code through the pipeline until the bug is resolved.
     
 3. What is the most important thing DevOps helps us achieve?
 
 The most important thing DevOps helps an organization achieve depends on what 
 that organization does, and depends on which area of the organization it is 
-applied to as well. 
+applied to as well. In general, it either lets teams move faster, ship
+higher-quality code, or both in tandem.
 
-Taking Kiwibot as an example, when it comes to software running on the robot 
-or the supervisory platform, the reliability requirements are extremely high.
-Extensive automated testing, configuration management etc. is then useful for the 
-purpose of increasing reliability, which is the most important thing. Over time, 
-this also lets engineering teams move faster as they can deploy into production
-with much less need for manual testing. 
+Taking Kiwibot as an example, when it comes to the robot's firmware, or the 
+supervisory platform, the reliability requirements are extremely high.
+Extensive automated testing, configuration management etc. is then useful for 
+the purpose of increasing reliability, which is the most important thing. Over 
+time, this also lets engineering teams move faster as they can deploy into 
+production without time-consuming manual testing. 
 
 When it comes to software like the B2B APIs, moving fast and adapting to
-customer requirements is the most important thing. Infrastructure automation
-then lets the engineering team move at a much higher velocity, since increased
-reliability is less of a concern there.
+customer requirements and new customer onboarding is the most important 
+thing. Infrastructure automation then lets the engineering team move at a much 
+higher velocity, since increasing reliability is less of a concern there.
 
-4. Explain your understanding and expertise on both the software development side and the technical operations side of an organization you have worked with in the past.
+4. Explain your understanding and expertise on both the software development 
+side and the technical operations side of an organization you have worked with 
+in the past.
+
+On the software development side, I taught myself basic software engineering 
+practices in order to study for my degree. During my time there, I picked up 
+Python and C/C++ to a reasonably high level. I also gained exposure to AWS and 
+Java. During class projects, research, and side projects I spent a lot of time 
+on environment set up and management, setting up cloud computing 
+environments, and general infrastructure work. Scientific code is generally 
+poorly maintained and not very well supported, so this was necessary. 
+
+When I co-founded Anchor Orbital, I worked on both writing physics and 
+engineering simulations, as well as setting up the infrastructure to make them 
+run. We mostly used Git and AWS for our workflow, while the actual environment 
+management used a range of tools depending on the packages used.
+
+I have less experience on the technical operations side of things, since most 
+of the code I worked on was for engineering or research, and wasn't 
+necessarily customer or business-facing code running in production. Most of my
+understanding here is from running cloud environments for scientific computing
+workloads, including for machine learning workloads..
 
 5. What is Version control and what are the benefits of using it?
 
+Version control lets you see and manage the changes to a codebase, and lets 
+developers share and update a common codebase, enabling easier collaboration.
+
+The benefits include, 
+- Engineering teams moving faster, since they have access to the same shared 
+code and don't have to spend time transferring code back and forth.
+- Less bugs and errors, since versions of the code can be tested and trialled 
+out before being out into production.
+- Faster onboarding for new developers, as they can immediately get started on
+the codebase with minimal setup.
+- Ability to easily rollback to prior working versions of the codebase, in case
+a buggy version does find its way into production.
+
 6. What are the KPIs that are used for gauging the success of a DevOps team?
+
+The KPIs can be,
+
+- Deployment frequency: How often are you deploying to production? Ideally,
+  deployments should be multiple times a day, with incremental changes. 
+- Deployment volume: How many new features, updates, changes are you shipping 
+  with each deployment? Generally the higher the better as long as you can keep
+  the frequency high, but care has to be taken that you don't spend all your 
+  dev time shipping the wrong thing. 
+- Change lead time: How long does it take between code being ready to deploy, 
+  and it actually running in a production environment? The lower this is, the 
+  more time it frees up for both devs and ops people. 
+- Error rate: After automated testing and quality checks, once code is in
+  production, how many bugs/errors/mistakes are found during monitoring? 
+  Again, lower the better.
+- Downtime: How much time on average are services working properly, vs. being 
+  disrupted? You want as little downtime as possible, and ideally zero. 
+- Time to recovery: If a change or bug causes service to be disrupted, how long 
+  does it take to get things running smoothly again? Should be as fast as
+  possible. 
+
+There are a lot of metrics that you can track for a DevOps deployment, so 
+I only mentioned a few here that I thought were the most important. The relevant
+metrics to track depend on the type of the project, and what the aim of a 
+DevOps deployment is.
 
 7. How will you approach a project that needs to implement DevOps?
 
-8. What is meant by Continuous Integration and why do you need one for Dev & Testing?
+Since DevOps can be quite broad, I'd clarify what the project needed first 
+and foremost. 
+
+Would they need,
+- To move faster, with automated pipelines to put code into production as fast 
+  as possible? 
+- To ship higher-quality and more reliable code while still maintaining enough
+  velocity, with extensive automated testing? 
+- To organize, administer, and expand their already existing infrastructure? 
+- Or some combination of all of the above? 
+
+Once I'd confirmed that, I'd probably check to see if there was a senior 
+developer or manager that has buy in from the development and operations teams, 
+and wants to implement DevOps practices for their project. If so, I would get 
+their help and assistance on the cultural aspects (enabling the software 
+engineers and operations teams to work closer together, teaching teams about 
+DevOps practices and processes), while I focus on the technical aspects. 
+This is because it would be quite difficult to implement large changes in how 
+people work as an outsider to a project. If such a person was not available,
+then I would handle the cultural change aspects by myself, relying on advice 
+from other DevOps engineers who had done it before. 
+
+On the technical side of things, I would pick a small supporting service or
+application that is not the project's core offering, then implement DevOps 
+practices there. Since it's not core, there'd be less risk if something were to
+go wrong, which would make it easier to get buy-in. Then, once I'd proven that 
+there is a significant performance improvement, I'd steadily roll out those 
+practices to larger and larger sections of the technology and company. This 
+approach reduces the risk of something vital breaking, and serves as a proof 
+point that the practices work when rolling out to other sections of the 
+technology stack.
+
+8. What is meant by Continuous Integration and why do you need one for 
+Dev & Testing?
+
+Continuous Integration (CI) refers to the practice of regularly merging code 
+into a main repository, ideally multiple times a day. Automated build and test 
+tools then take the code through tests, quality checks and into a production 
+environment, although the final deployment may need a person to sign off on it.
+
+It's useful because it enables,
+- Development teams to move faster.
+- Testing teams to catch more errors more quickly, as the changes are smaller
+- Code to be deployed into production at smaller intervals i.e. every few
+  days versus every few months.
+- Risk of service disruption with each change to be lowered, as each change 
+  is smaller and more frequent.
