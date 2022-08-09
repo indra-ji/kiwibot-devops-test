@@ -1,0 +1,59 @@
+QUESTIONS
+
+1. What is the need for DevOps in a company?
+
+DevOps lets companies move faster while making fewer mistakes. By aligning the 
+incentives between developers and operations and automating infrastructure 
+tasks end-to-end, DevOps can increase engineering velocity significantly while
+reducing human error. 
+
+2. Which are the top DevOps tools? Which tools have you worked on?
+
+Some (but not all) of the most widely used DevOps tools are, 
+
+- Git (source code management)
+- Jenkins (CI automation)
+- Docker (containerization)
+- Kubernetes (container orchestration) 
+- Chef (configuration management)
+- AWS (cloud computing) 
+- Selenium (automated testing)
+
+I have worked with Git, Docker, and AWS previously. 
+
+    a. How do all these tools work together?
+
+    These tools (and/or others) should fit together into one CI/CD (continuous
+    integration/continuous deployment) pipeline. In some cases, such as Docker 
+    and Kubernetes, the tools work with each other to let developers work at 
+    higher levels of abstraction. i.e. scaling up number of containers 
+    automatically along with workload, instead of setting up each container
+    manually.
+    
+3. What is the most important thing DevOps helps us achieve?
+
+The most important thing DevOps helps an organization achieve depends on what 
+that organization does, and depends on which area of the organization it is 
+applied to as well. 
+
+Taking Kiwibot as an example, when it comes to software running on the robot 
+or the supervisory platform, the reliability requirements are extremely high.
+Extensive automated testing, configuration management etc. is then useful for the 
+purpose of increasing reliability, which is the most important thing. Over time, 
+this also lets engineering teams move faster as they can deploy into production
+with much less need for manual testing. 
+
+When it comes to software like the B2B APIs, moving fast and adapting to
+customer requirements is the most important thing. Infrastructure automation
+then lets the engineering team move at a much higher velocity, since increased
+reliability is less of a concern there.
+
+4. Explain your understanding and expertise on both the software development side and the technical operations side of an organization you have worked with in the past.
+
+5. What is Version control and what are the benefits of using it?
+
+6. What are the KPIs that are used for gauging the success of a DevOps team?
+
+7. How will you approach a project that needs to implement DevOps?
+
+8. What is meant by Continuous Integration and why do you need one for Dev & Testing?
