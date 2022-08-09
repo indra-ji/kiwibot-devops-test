@@ -5,22 +5,21 @@ QUESTIONS
 DevOps lets companies move faster while making fewer mistakes. It does this by
 aligning the incentives between developers and operations people, automating
 build, test and deployment pipelines end-to-end, and by making the process of
-infrastructure and environment management much easier.  
+infrastructure and environment management much easier and less time-consuming.
 
 2. Which are the top DevOps tools? Which tools have you worked on?
 
 Some of the most widely used DevOps tools are, 
 
 - Git (version control)
-- Jenkins (automation server)
+- Jenkins (automation)
 - Docker (containerization)
 - Kubernetes (container orchestration) 
 - Chef (configuration management)
 - AWS (cloud computing) 
 - Selenium (automated testing)
 
-I have worked with Git, Docker, and AWS previously, and have tinkered with 
-Jenkins and Kubernetes.
+I have worked with Git, Docker, and AWS previously.
 
     a. How do all these tools work together?
 
@@ -28,24 +27,23 @@ Jenkins and Kubernetes.
     integration/continuous deployment) pipeline, with each one taking care of 
     one or a few steps in the pipeline.
 
-    As an example, code would be version in a dev branch using Git, where it
-    would then be pushed to a test environment and automatically tested using 
-    Jenkins. After passing automated tests, quality checks and syntax checks, 
-    it would then be moved to the production environment, containerized using
-    Docker, then deployed on AWS. This step can be automated via Jenkins or
-    similar tools, or have a human-in-the-loop for higher safety. If the
-    workload increases, then Kubernetes can be used to scale the number of
-    containers up and down. While the application code is running, a tool like
-    Datadog can be used to monitor the performance of the cloud service. Any
-    bugs or errors caught means that the process begins again, tweaking the old
+    As an example, code would be developed and versioned in a dev branch using 
+    Git, where it would then be merged to a test environment and automatically 
+    tested using Jenkins. After passing automated tests, quality checks and 
+    syntax checks, it would then be moved to the production environment, 
+    containerized using Docker, then deployed on AWS. This step can be 
+    automated via Jenkins or similar tools, or can be done manually. 
+    If the workload increases, then Kubernetes can be used to scale the number 
+    of containers up and down. While the application code is running, a tool 
+    like Datadog can be used to monitor the performance of the cloud service. 
+    Any bugs or errors caught means that the process begins again, tweaking the 
     code through the pipeline until the bug is resolved.
     
 3. What is the most important thing DevOps helps us achieve?
 
-The most important thing DevOps helps an organization achieve depends on what 
-that organization does, and depends on which area of the organization it is 
-applied to as well. In general, it either lets teams move faster, ship
-higher-quality code, or both in tandem.
+This depends on what that organization does, and depends on which area of the 
+organization it is applied to as well. In general, it either lets teams move 
+faster, ship higher-quality code, or both in tandem.
 
 Taking Kiwibot as an example, when it comes to the robot's firmware, or the 
 supervisory platform, the reliability requirements are extremely high.
@@ -65,9 +63,9 @@ in the past.
 
 On the software development side, I taught myself basic software engineering 
 practices in order to study for my degree. During my time there, I picked up 
-Python and C/C++ to a reasonably high level. I also gained exposure to AWS and 
-Java. During class projects, research, and side projects I spent a lot of time 
-on environment set up and management, setting up cloud computing 
+Python and C/C++ to a reasonably high level. I also gained exposure to Git, AWS 
+and Java. During class projects, research, and side projects I spent a lot of
+time on environment set up and management, setting up cloud computing 
 environments, and general infrastructure work. Scientific code is generally 
 poorly maintained and not very well supported, so this was necessary. 
 
@@ -80,7 +78,7 @@ I have less experience on the technical operations side of things, since most
 of the code I worked on was for engineering or research, and wasn't 
 necessarily customer or business-facing code running in production. Most of my
 understanding here is from running cloud environments for scientific computing
-workloads, including for machine learning workloads..
+workloads, including for machine learning workloads.
 
 5. What is Version control and what are the benefits of using it?
 
@@ -120,9 +118,9 @@ The KPIs can be,
   possible. 
 
 There are a lot of metrics that you can track for a DevOps deployment, so 
-I only mentioned a few here that I thought were the most important. The relevant
-metrics to track depend on the type of the project, and what the aim of a 
-DevOps deployment is.
+I only mentioned a few here that I thought were the most important. The 
+relevant metrics to track depend on the type of the project, and what the 
+aim of a DevOps deployment is.
 
 7. How will you approach a project that needs to implement DevOps?
 
@@ -143,20 +141,17 @@ and wants to implement DevOps practices for their project. If so, I would get
 their help and assistance on the cultural aspects (enabling the software 
 engineers and operations teams to work closer together, teaching teams about 
 DevOps practices and processes), while I focus on the technical aspects. 
-This is because it would be quite difficult to implement large changes in how 
-people work as an outsider to a project. If such a person was not available,
-then I would handle the cultural change aspects by myself, relying on advice 
-from other DevOps engineers who had done it before. 
+This is because it can be quite difficult to implement large changes in how 
+people work as a fresh recruit and an outsider to a project. If such a person 
+was not available, then I would handle the cultural change aspects by myself, 
+relying on advice from other DevOps engineers who had done it before. 
 
 On the technical side of things, I would pick a small supporting service or
 application that is not the project's core offering, then implement DevOps 
 practices there. Since it's not core, there'd be less risk if something were to
 go wrong, which would make it easier to get buy-in. Then, once I'd proven that 
 there is a significant performance improvement, I'd steadily roll out those 
-practices to larger and larger sections of the technology and company. This 
-approach reduces the risk of something vital breaking, and serves as a proof 
-point that the practices work when rolling out to other sections of the 
-technology stack.
+practices to larger and larger sections of the technology and company.
 
 8. What is meant by Continuous Integration and why do you need one for 
 Dev & Testing?
@@ -168,7 +163,8 @@ environment, although the final deployment may need a person to sign off on it.
 
 It's useful because it enables,
 - Development teams to move faster.
-- Testing teams to catch more errors more quickly, as the changes are smaller
+- Testing teams to catch  errors more quickly, as the changes are smaller and 
+  more frequent.
 - Code to be deployed into production at smaller intervals i.e. every few
   days versus every few months.
 - Risk of service disruption with each change to be lowered, as each change 
