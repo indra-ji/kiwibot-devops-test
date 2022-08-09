@@ -14,7 +14,11 @@ SETTING UP GCP
 3. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
 
+DEPLOYING INTO TEST ENVIRONMENT
+
 DEPLOYING INTO PRODUCTION 
+
+
 
 1. Creating a Memorystore instance for Redis 
     gcloud redis instances create redis-kiwibot-devops --size=1 --region=us-central1
