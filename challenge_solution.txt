@@ -2,27 +2,30 @@
 
 I chose to adapt already existing code for a multi-user chat app 
 instead of writing something from scratch, to cut down on development time.
-The app is deployed via Cloud Run, which runs code in containers via a 
+
+- The app is deployed via Cloud Run, which runs code in containers via a 
 serverless architecture and can automatically scale up and down with 
-demand (meeting conditions a. and d.) Automated testing is carried out via 
-GitHub Actions when code is merged from dev to test, meeting condition b. I 
-chose this over something like Jenkins because of the time constraint, and 
-because it was easier to set up and integrate.jk
-Cloud Build is used to continuously build code into the testing environment, 
+demand (meeting conditions a. and d.) 
+- Automated testing is carried out via GitHub Actions when code is merged 
+from dev to test, meeting condition b. I chose this over something like 
+Jenkins because of the time constraint, and because it was easier to set 
+up and integrate.
+- Cloud Build is used to continuously build code into the testing environment, 
 where QA and user testing can be conducted. Then, after manual sign off from 
 QA and testing teams after testing in the test environment, Cloud Build is 
 used to deploy code into production, meeting condition c. I chose to use 
 Cloud Build because it already came integrated with GCP, and again because of 
-the time constraint. To meet condition e. and keep all the containers synced 
+the time constraint. 
+- To meet condition e. and keep all the containers synced 
 together, a Redis database is connected to the containers via a Serverless VPC 
 Access Connector. I chose Redis over Firebase because I didn't need 
-persistent storage, and the Access Connector was necessary to connect that to 
+persistent storage, and the Access Connector was necessary to connect that to  
 the containers on Cloud Run.
 
 ***PIPELINE*** 
 
-
-
+- The pipeline is set up to run in a continuous integration environment, 
+where the code is built, tested, and deployed to the test environment.
 
 ***BUILD PROCESS***
 
@@ -33,33 +36,34 @@ SETTING UP GCP
 
 1. Install and initialize the GCP CLI 
     https://cloud.google.com/sdk/docs/install
+    
 
-INITIAL DEPLOYMENT INTO PRODUCTION
+INITIAL DEPLOYMENT INTO TEST
 
 1. Set this project as default 
     gcloud config set project kiwibot-test-server-1
 
 2. Configure gcloud for your chosen region 
-    gcloud config set run/region us-central1
+    gcloud config set run/region us-south1
 
 3. Creating a Memorystore instance for Redis 
-    gcloud redis instances create redis-test --size=1 --region=us-central1
+    gcloud redis instances create redis-test --size=1 --region=us-south1
 
 4. Start a Serverless VPC Access Connector 
     gcloud compute networks vpc-access connectors create connector-test \
-  --region us-central1 \
+  --region us-south1 \
   --range "10.8.0.0/28"
 
 5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
-     export REDISHOST=$(gcloud redis instances describe redis-test --region us-central1 --format "value(host)")
+     export REDISHOST=$(gcloud redis instances describe redis-test --region us-south1 --format "value(host)")
 
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
 7. Build and deploy. 
     gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-prod \
+    --vpc-connector connector-test \
     --allow-unauthenticated \
     --timeout 3600 \
     --service-account chat-identity \
@@ -73,19 +77,19 @@ INITIAL DEPLOYMENT INTO PRODUCTION
     gcloud config set project kiwibot-prod-server-1
 
 2. Configure gcloud for your chosen region 
-    gcloud config set run/region us-central1
+    gcloud config set run/region us-south1
 
 3. Creating a Memorystore instance for Redis 
-    gcloud redis instances create redis-prod --size=1 --region=us-central1
+    gcloud redis instances create redis-prod --size=1 --region=us-south1
 
 4. Start a Serverless VPC Access Connector 
     gcloud compute networks vpc-access connectors create connector-prod \
-  --region us-central1 \
+  --region us-south1 \
   --range "10.8.0.0/28"
 
 5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
-     export REDISHOST=$(gcloud redis instances describe redis-prod --region us-central1 --format "value(host)")
+     export REDISHOST=$(gcloud redis instances describe redis-prod --region us-south1 --format "value(host)")
 
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
@@ -102,21 +106,9 @@ authorized network.
 
 ROLLING DEPLOYMENT INTO TEST 
 
-1.  gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-prod \
-    --allow-unauthenticated \
-    --timeout 3600 \
-    --service-account chat-identity \
-    --update-env-vars REDISHOST=$REDISHOST
 
 ROLLING DEPLOYMENT INTO PRODUCTION 
 
-2. gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-prod \
-    --allow-unauthenticated \
-    --timeout 3600 \
-    --service-account chat-identity \
-    --update-env-vars REDISHOST=$REDISHOST
 
 USER TESTING 
 
@@ -129,10 +121,10 @@ USER TESTING
 
 ***ROADBLOCKS***
 
-I lost quite a lot of time due to problems with enabling billing, as I reached 
+- I lost quite a lot of time due to problems with enabling billing, as I reached 
 the limit of projects on which I could enable billing. 
-I believe that this would have been the case no matter the specific design of 
+- I believe that this would have been the case no matter the specific design of 
 the service, as i.e. an alternative architecture using Google Kubernetes Engine
-that I investigated ran into the same problem. I should have dug more into the 
-billing structure of GCP beforehand before starting to design and implement 
-the solution in order to avoid this.
+that I investigated ran into the same problem. 
+- I should have dug more into the billing structure of GCP beforehand before 
+starting to design and implement the solution in order to avoid this.
