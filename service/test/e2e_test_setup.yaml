@@ -27,5 +27,5 @@ steps:
 substitutions:
   _SERVICE: websockets
   _CONNECTOR: my-connector
-  _REGION: us-central1
+  _REGION: us-south1
   _REDISHOST: localhost
