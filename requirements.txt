@@ -1,8 +1,8 @@
 Dev machine: M1 MacBook Air 2020
-Dev OS: macOS Monterey 12.0.
+Dev OS: macOS Monterey 12.0.1
 Node.js: 18.7.0
 npm: 8.15.0
-Python: 3.10.5
+Python: 3.7.13
 Java:
 Git: 
 Jenkins:
