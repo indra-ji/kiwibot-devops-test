@@ -1,4 +1,5 @@
-1. Design and implement a solution in GCP for a sockets.io (http://Socket.IO) service with the following features,
+1. Design and implement a solution in GCP for a sockets.io (http://Socket.IO) 
+service with the following features,
     a. The service must be auto-scalable
     b. The service must have a pipeline to do tests on certain branches’ updates
     c. The service must be deployed on certain branches’ updates
