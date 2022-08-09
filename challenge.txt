@@ -1,0 +1,8 @@
+1. Design and implement a solution in GCP for a sockets.io (http://Socket.IO) service with the following features,
+    a. The service must be auto-scalable
+    b. The service must have a pipeline to do tests on certain branches’ updates
+    c. The service must be deployed on certain branches’ updates
+    d. When the service load gets down the service must delete unnecessary pods
+    e. All of the instances must be synced
+    
+Please describe the solution in detail, design, and justify why you chose it.
