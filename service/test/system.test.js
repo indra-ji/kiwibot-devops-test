@@ -34,7 +34,7 @@ describe('End-to-End Tests', () => {
     );
   }
   const CONNECTOR = 'my-connector';
-  const REGION = 'us-south1';
+  const REGION = 'us-central1';
   let browser, browserPage;
   const {REDISHOST} = process.env;
   if (!REDISHOST) {

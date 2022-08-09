@@ -34,7 +34,7 @@ With `npm`:
 
 1. Deploy to Cloud Run:
     ```
-    export REGION=us-south1
+    export REGION=us-central1
     export CONNECTOR_NAME=<CONNECTOR>
     export REDISHOST=$(gcloud redis instances describe INSTANCE_ID --region REGION --format "value(host)")
 
