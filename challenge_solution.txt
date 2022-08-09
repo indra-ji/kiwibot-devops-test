@@ -8,42 +8,79 @@ SETTING UP GCP
 1. Install and initialize the GCP CLI 
     https://cloud.google.com/sdk/docs/install
 
-2. Set this project as default 
-    gcloud config set project kiwibot-devops-prod
 
-3. Configure gcloud for your chosen region 
+INITIAL DEPLOYMENT INTO TEST
+
+
+
+
+1. Set this project as default 
+    gcloud config set project test
+
+2. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
 
-DEPLOYING INTO TEST ENVIRONMENT
+3. Creating a Memorystore instance for Redis 
+    gcloud redis instances create redis-test --size=1 --region=us-central1
 
-DEPLOYING INTO PRODUCTION 
-
-
-
-1. Creating a Memorystore instance for Redis 
-    gcloud redis instances create redis-kiwibot-devops --size=1 --region=us-central1
-
-2. Start a Serverless VPC Access Connector 
-    gcloud compute networks vpc-access connectors create connector-kiwibot-devops \
+4. Start a Serverless VPC Access Connector 
+    gcloud compute networks vpc-access connectors create connector-test \
   --region us-central1 \
   --range "10.8.0.0/28"
 
-3. Define environment variable with the IP address of your Redis instance's 
+5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
-     export REDISHOST=$(gcloud redis instances describe redis-kiwibot-devops --region us-central1 --format "value(host)")
+     export REDISHOST=$(gcloud redis instances describe redis-test --region us-central1 --format "value(host)")
 
-4. Create service account for service identity.
+6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
-5. Build and deploy. 
+7. Build and deploy. 
     gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-kiwibot-devops \
+    --vpc-connector connector-prod \
     --allow-unauthenticated \
     --timeout 3600 \
     --service-account chat-identity \
     --update-env-vars REDISHOST=$REDISHOST
 
-    Note: Press Y on any API installs that may be necessary 
+    Note: Press Y on any steps or API installs that may be necessary 
+
+INITIAL DEPLOYMENT INTO PRODUCTION
+
+1. Set this project as default 
+    gcloud config set project prod
+
+2. Configure gcloud for your chosen region 
+    gcloud config set run/region us-central1
+
+3. Creating a Memorystore instance for Redis 
+    gcloud redis instances create redis-prod --size=1 --region=us-central1
+
+4. Start a Serverless VPC Access Connector 
+    gcloud compute networks vpc-access connectors create connector-prod \
+  --region us-central1 \
+  --range "10.8.0.0/28"
+
+5. Define environment variable with the IP address of your Redis instance's 
+authorized network. 
+     export REDISHOST=$(gcloud redis instances describe redis-prod --region us-central1 --format "value(host)")
+
+6. Create service account for service identity.
+    gcloud iam service-accounts create chat-identity
+
+7. Build and deploy. 
+    gcloud beta run deploy chat-app --source . \
+    --vpc-connector connector-prod \
+    --allow-unauthenticated \
+    --timeout 3600 \
+    --service-account chat-identity \
+    --update-env-vars REDISHOST=$REDISHOST
+
+    Note: Press Y on any steps or API installs that may be necessary 
+
+DEPLOYMENT INTO TEST 
+
+DEPLOYMENT INTO PRODUCTION 
 
 USER TESTING 
 
