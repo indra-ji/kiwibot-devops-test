@@ -1,0 +1,18 @@
+QUESTIONS
+
+1. What is the need for DevOps in a company?
+
+2. Which are the top DevOps tools? Which tools have you worked on?
+    a. How do all these tools work together?
+    
+3. What is the most important thing DevOps helps us achieve?
+
+4. Explain your understanding and expertise on both the software development side and the technical operations side of an organization you have worked with in the past.
+
+5. What is Version control and what are the benefits of using it?
+
+6. What are the KPIs that are used for gauging the success of a DevOps team?
+
+7. How will you approach a project that needs to implement DevOps?
+
+8. What is meant by Continuous Integration and why do you need one for Dev & Testing?
