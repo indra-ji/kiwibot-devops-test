@@ -11,9 +11,6 @@ SETTING UP GCP
 
 INITIAL DEPLOYMENT INTO TEST
 
-
-
-
 1. Set this project as default 
     gcloud config set project test
 
