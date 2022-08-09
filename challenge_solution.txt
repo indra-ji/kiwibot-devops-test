@@ -93,7 +93,7 @@ authorized network.
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
-7. Build and deploy. 
+7. Build and deploy (RUN FROM INSIDE SERVICE DIRECTORY) 
     gcloud beta run deploy chat-app --source . \
     --vpc-connector connector-prod \
     --allow-unauthenticated \
