@@ -9,7 +9,7 @@ SETTING UP GCP
     https://cloud.google.com/sdk/docs/install
 
 2. Set this project as default 
-    gcloud config set project kiwibot-devops-prod
+    gcloud config set project kiwibot-devops
 
 3. Configure gcloud for your chosen region 
     gcloud config set run/region us-central1
@@ -17,23 +17,23 @@ SETTING UP GCP
 DEPLOYING INTO PRODUCTION 
 
 1. Creating a Memorystore instance for Redis 
-    gcloud redis instances create redis-kiwibot-devops --size=1 --region=us-central1
+    gcloud redis instances create kiwibot-redis --size=1 --region=us-central1
 
 2. Start a Serverless VPC Access Connector 
-    gcloud compute networks vpc-access connectors create connector-kiwibot-devops \
+    gcloud compute networks vpc-access connectors create connector-kiwibot \
   --region us-central1 \
   --range "10.8.0.0/28"
 
 3. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
-     export REDISHOST=$(gcloud redis instances describe redis-kiwibot-devops --region us-central1 --format "value(host)")
+     export REDISHOST=$(gcloud redis instances describe kiwibot-redis --region us-central1 --format "value(host)")
 
 4. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
 5. Build and deploy. 
     gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-kiwibot-devops \
+    --vpc-connector connector-kiwibot \
     --allow-unauthenticated \
     --timeout 3600 \
     --service-account chat-identity \
