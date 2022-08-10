@@ -154,6 +154,8 @@ ROLLING DEPLOYMENT INTO PRODUCTION
 USER TESTING 
 
 1. Go to generated URL via your browser. 
+    Production application - https://chat-app-3bnxmm5mca-uc.a.run.app
+    Test application - https://chat-app-ebdboyjvgq-uc.a.run.app
 
 2. Add name and name of the room. 
 
@@ -161,7 +163,7 @@ USER TESTING
 
 ***ROADBLOCKS***
 
-1. I lost quite a lot of time due to problems with enabling billing, as I reached 
+- I lost quite a lot of time due to problems with enabling billing, as I reached 
 the limit of projects on which I could enable it. 
     - I believe that this would have been the case no matter the specific design of 
     the service, as i.e. an alternative architecture using Google Kubernetes Engine
