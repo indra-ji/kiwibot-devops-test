@@ -27,4 +27,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
-        run: echo Running a basic testing script. 
+        run: echo Running a basic testing script, to make sure that code pushed from dev to test works well. 
