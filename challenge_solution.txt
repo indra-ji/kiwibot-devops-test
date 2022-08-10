@@ -1,30 +1,31 @@
 ***DESIGN***
 
-I chose to adapt already existing code for a multi-user chat app 
-instead of writing something from scratch, to cut down on development time.
+I chose to adapt already existing code for a multi-user chat app used in
+an example tutorial in GCP instead of writing something from scratch, 
+to cut down on development time.
 
 - The app is deployed via Cloud Run, which runs code in containers via a 
 serverless architecture and can automatically scale up and down with 
-demand (meeting conditions a. and d.). I chose this over GKE (Google Kubernetes Engine)
-as GKE is too complex for this usecase, and since Cloud Run abstracts away 
-a lot of the infrastructure management.
+demand (meeting condition a). It can also scale down to zero connections 
+if necessary, meeting condition d. I chose this over GKE (Google Kubernetes Engine)
+as GKE is too complex for this usecase, and may take too long.
 
 - Automated testing is carried out via GitHub Actions when code is merged 
 from dev to test, meeting condition b. I chose this over something like 
-Jenkins because of the time constraint, and because it was easier to set 
+Jenkins because of the time constraint, and because it was faster to set 
 up and integrate.
 
-- Cloud Build is used to continuously build code into the testing environment, 
-where QA and user testing can be conducted. Then, after manual QA and testing, 
-Cloud Build is used to deploy code into production, meeting condition c. I chose 
-to use Cloud Build because it already came integrated with GCP and works
-automatically with Cloud Run, and again because of the time constraint. 
+- Cloud Build is used to continuously build code into the testing environment
+after automated testing is completed, where QA and user testing can be conducted. 
+Then, after manual QA and testing, Cloud Build is used to deploy code into production, 
+meeting condition c. I chose to use Cloud Build because it already came integrated 
+with GCP and works automatically with Cloud Run, and again because of the time constraint. 
 
 - To meet condition e. and keep all the containers synced 
 together, a Redis database is connected to the containers via a Serverless VPC 
 Access Connector. I chose Redis over Firebase because I didn't need 
 persistent storage, and the Access Connector was necessary to connect that to  
-the containers on Cloud Run.
+the containers on Cloud Run as they all needed to be on the same VPC network.
 
 ***PIPELINE*** 
 
@@ -32,7 +33,7 @@ the containers on Cloud Run.
 where the code is built, tested, and deployed to the test environment.
 - Then, automated and manual tests are run in the test environment, before
 being manually deployed to the production environment. I chose to make the 
-process of pushing into production manual, as end-to-end automation can be 
+process of pushing into production manual as end-to-end automation can be 
 too brittle. 
 
 ***BUILD PROCESS***
@@ -46,7 +47,7 @@ SETTING UP GCP
     https://cloud.google.com/sdk/docs/install
     
 
-INITIAL DEPLOYMENT INTO TEST
+INITIAL DEPLOYMENT INTO TEST ENVIRONMENT
 
 1. Set this project as default 
     gcloud config set project kiwibot-test-server-1
@@ -82,7 +83,7 @@ authorized network.
 
     Note: Press Y on any steps or API installs that may be necessary 
 
-INITIAL DEPLOYMENT INTO PRODUCTION
+INITIAL DEPLOYMENT INTO PRODUCTION ENVIRONMENT
 
 1. Set this project as default 
     gcloud config set project kiwibot-prod-server-1
@@ -118,7 +119,7 @@ authorized network.
 
     Note: Press Y on any steps or API installs that may be necessary 
 
-ROLLING DEPLOYMENT INTO TEST 
+SUBSEQUENT DEPLOYMENT INTO TEST ENVIRONMENT
 
 1. Set this project as default 
     gcloud config set project kiwibot-test-server-1
@@ -134,7 +135,7 @@ ROLLING DEPLOYMENT INTO TEST
     --service-account chat-identity \
     --update-env-vars REDISHOST=$REDISHOST
 
-ROLLING DEPLOYMENT INTO PRODUCTION 
+SUBSEQUENT DEPLOYMENT INTO PRODUCTION ENVIRONMENT
 
 1. Set this project as default 
     gcloud config set project kiwibot-prod-server-1
@@ -151,7 +152,7 @@ ROLLING DEPLOYMENT INTO PRODUCTION
     --update-env-vars REDISHOST=$REDISHOST
 
 
-USER TESTING 
+USING THE APPLICATION 
 
 1. Go to generated URL via your browser. 
     Production application - https://chat-app-3bnxmm5mca-uc.a.run.app
@@ -171,11 +172,12 @@ the limit of projects on which I could enable it.
     - I should have dug more into the billing structure of GCP beforehand before 
     starting to design and implement the solution in order to avoid this.
 
-- Second thing was that the Access Connector refused to start from CLI for the test 
-environment due to default settings having too high of a cap for maximum instances, 
-I had to set that up via the console initially.
+- Access Connector refused to start from CLI for the test environment due to default 
+settings having too high of a cap for maximum instances and regional CPU quotas being
+exhausted, I had to set that up via the console initially.
 
 - The production application works fine, but the test application does not, as it gets
 stuck at the login screen. I'm unable to find out why so far, because as far as I can see, 
 all the backend code is identical. Further updates to the production application also have 
-this problem.
+this problem. The problem may be with the production code, and since the focus is on the 
+infrastructure, I chose to spend time on that instead of debugging the application.
