@@ -5,16 +5,21 @@ instead of writing something from scratch, to cut down on development time.
 
 - The app is deployed via Cloud Run, which runs code in containers via a 
 serverless architecture and can automatically scale up and down with 
-demand (meeting conditions a. and d.) 
+demand (meeting conditions a. and d.). I chose this over GKE (Google Kubernetes Engine)
+as GKE is too complex for this usecase, and since Cloud Run abstracts away 
+a lot of the infrastructure management.
+
 - Automated testing is carried out via GitHub Actions when code is merged 
 from dev to test, meeting condition b. I chose this over something like 
 Jenkins because of the time constraint, and because it was easier to set 
 up and integrate.
+
 - Cloud Build is used to continuously build code into the testing environment, 
 where QA and user testing can be conducted. Then, after manual QA and testing, 
 Cloud Build is used to deploy code into production, meeting condition c. I chose 
-to use Cloud Build because it already came integrated with GCP, and again because of 
-the time constraint. 
+to use Cloud Build because it already came integrated with GCP and works
+automatically with Cloud Run, and again because of the time constraint. 
+
 - To meet condition e. and keep all the containers synced 
 together, a Redis database is connected to the containers via a Serverless VPC 
 Access Connector. I chose Redis over Firebase because I didn't need 
@@ -25,6 +30,10 @@ the containers on Cloud Run.
 
 - The pipeline is set up to run in a continuous integration environment, 
 where the code is built, tested, and deployed to the test environment.
+- Then, automated and manual tests are run in the test environment, before
+being manually deployed to the production environment. I chose to make the 
+process of pushing into production manual, as end-to-end automation can be 
+too brittle. 
 
 ***BUILD PROCESS***
 
@@ -60,7 +69,10 @@ authorized network.
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
-7. Build and deploy (make sure you are inside the service folder!)
+7. Navigate to the directory that holds the source code.
+    cd ~/kiwibot-devops-test/service/
+
+8. Build and deploy.
     gcloud beta run deploy chat-app --source . \
     --vpc-connector connector-test \
     --allow-unauthenticated \
@@ -93,7 +105,10 @@ authorized network.
 6. Create service account for service identity.
     gcloud iam service-accounts create chat-identity
 
-7. Build and deploy (RUN FROM INSIDE SERVICE DIRECTORY) 
+7. Navigate to the directory that holds the source code.
+    cd ~/kiwibot-devops-test/service/
+
+8. Build and deploy.
     gcloud beta run deploy chat-app --source . \
     --vpc-connector connector-prod \
     --allow-unauthenticated \
@@ -105,8 +120,35 @@ authorized network.
 
 ROLLING DEPLOYMENT INTO TEST 
 
+1. Set this project as default 
+    gcloud config set project kiwibot-test-server-1
+
+2. Navigate inside the service directory.
+    cd ~/kiwibot-devops-test/service/
+
+3. Update and deploy.
+    gcloud beta run deploy chat-app --source . \
+    --vpc-connector connector-test \
+    --allow-unauthenticated \
+    --timeout 3600 \
+    --service-account chat-identity \
+    --update-env-vars REDISHOST=$REDISHOST
 
 ROLLING DEPLOYMENT INTO PRODUCTION 
+
+1. Set this project as default 
+    gcloud config set project kiwibot-prod-server-1
+
+2. Navigate inside the service directory.
+    cd ~/kiwibot-devops-test/service/
+
+3. Update and deploy.
+    gcloud beta run deploy chat-app --source . \
+    --vpc-connector connector-prod \
+    --allow-unauthenticated \
+    --timeout 3600 \
+    --service-account chat-identity \
+    --update-env-vars REDISHOST=$REDISHOST
 
 
 USER TESTING 
@@ -117,11 +159,10 @@ USER TESTING
 
 3. Use the application. 
 
-
 ***ROADBLOCKS***
 
 1. I lost quite a lot of time due to problems with enabling billing, as I reached 
-the limit of projects on which I could enable billing. 
+the limit of projects on which I could enable it. 
     - I believe that this would have been the case no matter the specific design of 
     the service, as i.e. an alternative architecture using Google Kubernetes Engine
     that I investigated ran into the same problem. 
@@ -129,4 +170,5 @@ the limit of projects on which I could enable billing.
     starting to design and implement the solution in order to avoid this.
 
 - Second thing was that the Access Connector refused to start from CLI for the test 
-environment, I had to set that up via the console
+environment due to default settings having too high of a cap for maximum instances, 
+I had to set that up via the console initially.
