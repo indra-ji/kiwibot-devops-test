@@ -4,22 +4,25 @@ I chose to adapt already existing code for a multi-user chat app used in
 an example tutorial in GCP instead of writing something from scratch, 
 to cut down on development time as this is a time-constrained assignment.
 
+- The Git workflow uses 3 branches, prod (production environment), test (testing environment), 
+and dev (development environment).
+
 - The app is deployed via Cloud Run, which runs code in containers via a 
 serverless architecture and can automatically scale up and down with 
 demand (feature a). It can also scale down to zero connections 
 if necessary (feature d). I chose this over GKE (Google Kubernetes Engine)
 as GKE is too complex for this usecase, and may take too long.
 
-- Automated testing is carried out via GitHub Actions when code is merged 
-from dev to test (feature b). I chose this over something like 
+- Automated testing is carried out via GitHub Actions when code is pushed 
+to dev (feature b). I chose this over something like 
 Jenkins because it was faster to set up and integrate, being already part of 
 the GitHub ecosystem.
 
-- Cloud Build is used to continuously build code into the testing environment
-after automated testing is completed, where QA and user testing can be conducted. 
+- Cloud Build is used to continuously build and deploy code into the testing environment
+after code that has been automatically tested is merged from dev to test. 
 Then, after manual QA and testing, Cloud Build is used to automatically deploy code into production, 
 (feature c.) I chose to use Cloud Build because it already came integrated 
-with GCP and works automatically with Cloud Run, and again because it was the fastest to 
+with GCP and works well with Cloud Run, and again because it was the fastest to 
 set up and integrate.
 
 - To meet condition e. and keep all the containers synced 
@@ -30,19 +33,23 @@ Redis Memorystore and the containers.
 
 ***PIPELINE*** 
 
-- The pipeline is set up to run via continuous integration, 
-where the code is built, tested, and deployed to the test environment.
+- Code pushed to dev is automatically tested, and then merged to test branch manually 
+after successful tests. This can be automated in future via GitHub webhooks, 
+but I chose not to implement it due to time constraints.
+
+- Code merged to test branch is automatically deployed on the test environment. 
 
 - 100% of traffic is routed to new revisions in the test environment, since
-purpose of a test environment is to try and break and fix things. 
+purpose of a test environment is to try and break and fix things as fast as possible. 
 
-- Then, automated and manual tests are run in the test environment, before
-being automatically deployed to the production environment. I chose to make the 
-process of pushing into production automatic, as new revisions start at 0% traffic.
+- Then, automated and manual tests are run in the test environment. If these are 
+successful, test is merged with prod, which automatically deployed the code into 
+the production environment. I chose to make the process of pushing into production 
+automatic, as new revisions start at 0% traffic.
 
 - New revisions need to manually have traffic routed to them, as they start at 0%. 
-This is in order to enable blue-green deployments, which may need different 
-percentages of traffic going to the new application in production.
+This is in order to minimise the risk of something breaking from an accidental deployment, 
+and to enable blue-green deployments.
 
 ***BUILD PROCESS***
 
@@ -168,10 +175,9 @@ the limit of projects on which I could enable it.
 
 - Access Connector refused to start from CLI for the test environment due to default 
 settings having too high of a cap for maximum instances and regional CPU quotas being
-exhausted, I had to set that up via the console initially. That also took a while to fix.
+exhausted, I had to set that up via the console initially. 
 
-- The production application works fine, but the test application does not, as it gets
-stuck at the login screen. I'm unable to find out why so far, because as far as I can see, 
-all the backend code is identical. Further updates to the production application also have 
+- The production application works with full functionality, but the test application is only 
+partially functional. Further updates to the production application also have 
 this problem. The problem may be with the production code, and since the focus is on the 
 infrastructure, I chose to spend time on that instead of debugging the application.
