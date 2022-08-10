@@ -172,3 +172,7 @@ the limit of projects on which I could enable it.
 - Second thing was that the Access Connector refused to start from CLI for the test 
 environment due to default settings having too high of a cap for maximum instances, 
 I had to set that up via the console initially.
+
+- The production application works fine, but the test application does not. I'm unable 
+to find out why so far, because as far as I can see, all the backend code is identical. 
+I'm guessing it's something to do 
