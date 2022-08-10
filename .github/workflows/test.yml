@@ -1,14 +1,14 @@
-# Basic testing pipeline. Empty script that runs when code is pushed to test, or a PR is submitted to test.
+# Basic testing pipeline. Empty script that runs when code is pushed to dev, or a PR is submitted to dev.
 
 name: basic_test
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "test" branch
+  # Triggers the workflow on push or pull request events but only for the "dev" branch
   push:
-    branches: [ "test" ]
+    branches: [ "dev" ]
   pull_request:
-    branches: [ "test" ]
+    branches: [ "dev" ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
