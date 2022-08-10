@@ -175,6 +175,7 @@ the limit of projects on which I could enable it.
 environment due to default settings having too high of a cap for maximum instances, 
 I had to set that up via the console initially.
 
-- The production application works fine, but the test application does not. I'm unable 
-to find out why so far, because as far as I can see, all the backend code is identical. 
-I'm guessing it's something to do 
+- The production application works fine, but the test application does not, as it gets
+stuck at the login screen. I'm unable to find out why so far, because as far as I can see, 
+all the backend code is identical. Further updates to the production application also have 
+this problem.
