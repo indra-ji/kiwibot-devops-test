@@ -28,3 +28,6 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         run: echo Running a placeholder, to make sure that code pushed to dev works well. 
+      
+      # Basic test cases
+      
