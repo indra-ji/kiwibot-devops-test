@@ -4,7 +4,7 @@ QUESTIONS
 
 DevOps lets companies move faster while making fewer mistakes. It does this by
 aligning the incentives between developers and operations people, automating
-build, test and deployment pipelines end-to-end, and by making the process of
+build, test and deployment pipelines, and by making the process of
 infrastructure and environment management much easier and less time-consuming.
 
 2. Which are the top DevOps tools? Which tools have you worked on?
@@ -30,14 +30,12 @@ I have worked with Git, Docker, and AWS previously.
     As an example, code would be developed and versioned in a dev branch using 
     Git, where it would then be merged to a test environment and automatically 
     tested using Jenkins. After passing automated tests, quality checks and 
-    syntax checks, it would then be moved to the production environment, 
-    containerized using Docker, then deployed on AWS. This step can be 
-    automated via Jenkins or similar tools, or can be done manually. 
+    syntax checks, containerized using Docker, then deployed on a test server on AWS. 
+    After passing QA checks, the test code would then be merged to a production environment,
+    containerized and then deployed on the production server.
     If the workload increases, then Kubernetes can be used to scale the number 
     of containers up and down. While the application code is running, a tool 
-    like Datadog can be used to monitor the performance of the cloud service. 
-    Any bugs or errors caught means that the process begins again, tweaking the 
-    code through the pipeline until the bug is resolved.
+    like Datadog can be used to monitor the performance of the cloud service.    
     
 3. What is the most important thing DevOps helps us achieve?
 
@@ -47,10 +45,10 @@ faster, ship higher-quality code, or both in tandem.
 
 Taking Kiwibot as an example, when it comes to the robot's firmware, or the 
 supervisory platform, the reliability requirements are extremely high.
-Extensive automated testing, configuration management etc. is then useful for 
+Extensive automated testing, quality checking. is then useful for 
 the purpose of increasing reliability, which is the most important thing. Over 
-time, this also lets engineering teams move faster as they can deploy into 
-production without time-consuming manual testing. 
+time, this also lets engineering teams move faster as they can deploy without 
+as much time-consuming manual testing. 
 
 When it comes to software like the B2B APIs, moving fast and adapting to
 customer requirements and new customer onboarding is the most important 
@@ -142,8 +140,8 @@ their help and assistance on the cultural aspects (enabling the software
 engineers and operations teams to work closer together, teaching teams about 
 DevOps practices and processes), while I focus on the technical aspects. 
 This is because it can be quite difficult to implement large changes in how 
-people work as a fresh recruit and an outsider to a project. If such a person 
-was not available, then I would handle the cultural change aspects by myself, 
+people work as a fresh recruit and an outsider to a project. If someone senior
+was not available, then I would attempt to handle the cultural change aspects by myself, 
 relying on advice from other DevOps engineers who had done it before. 
 
 On the technical side of things, I would pick a small supporting service or

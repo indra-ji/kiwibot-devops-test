@@ -17,7 +17,7 @@ up and integrate.
 
 - Cloud Build is used to continuously build code into the testing environment
 after automated testing is completed, where QA and user testing can be conducted. 
-Then, after manual QA and testing, Cloud Build is used to deploy code into production, 
+Then, after manual QA and testing, Cloud Build is used to manually deploy code into production, 
 meeting condition c. I chose to use Cloud Build because it already came integrated 
 with GCP and works automatically with Cloud Run, and again because of the time constraint. 
 
@@ -29,12 +29,21 @@ the containers on Cloud Run as they all needed to be on the same VPC network.
 
 ***PIPELINE*** 
 
-- The pipeline is set up to run in a continuous integration environment, 
+- The pipeline is set up to run in a continuous integration manner, 
 where the code is built, tested, and deployed to the test environment.
+
 - Then, automated and manual tests are run in the test environment, before
 being manually deployed to the production environment. I chose to make the 
 process of pushing into production manual as end-to-end automation can be 
-too brittle. 
+too brittle, and may not catch certain errors.
+
+- 100% of traffic is routed to new revisions in the test environment, since
+purpose of a test environment is to try and break and fix things. 
+
+- New revisions in the production environment start at 0% traffic, and need 
+to manually have traffic routed to them. This is in order to enable blue-green
+deployments, which may need different percentages of traffic going to the new 
+application in production.
 
 ***BUILD PROCESS***
 
