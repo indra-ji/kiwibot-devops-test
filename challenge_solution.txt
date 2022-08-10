@@ -2,87 +2,95 @@
 
 I chose to adapt already existing code for a multi-user chat app used in
 an example tutorial in GCP instead of writing something from scratch, 
-to cut down on development time.
+to cut down on development time as this is a time-constrained assignment.
 
 - The app is deployed via Cloud Run, which runs code in containers via a 
 serverless architecture and can automatically scale up and down with 
-demand (meeting condition a). It can also scale down to zero connections 
-if necessary, meeting condition d. I chose this over GKE (Google Kubernetes Engine)
+demand (feature a). It can also scale down to zero connections 
+if necessary (feature d). I chose this over GKE (Google Kubernetes Engine)
 as GKE is too complex for this usecase, and may take too long.
 
 - Automated testing is carried out via GitHub Actions when code is merged 
-from dev to test, meeting condition b. I chose this over something like 
-Jenkins because of the time constraint, and because it was faster to set 
-up and integrate.
+from dev to test (feature b). I chose this over something like 
+Jenkins because it was faster to set up and integrate, being already part of 
+the GitHub ecosystem.
 
 - Cloud Build is used to continuously build code into the testing environment
 after automated testing is completed, where QA and user testing can be conducted. 
-Then, after manual QA and testing, Cloud Build is used to manually deploy code into production, 
-meeting condition c. I chose to use Cloud Build because it already came integrated 
-with GCP and works automatically with Cloud Run, and again because of the time constraint. 
+Then, after manual QA and testing, Cloud Build is used to automatically deploy code into production, 
+(feature c.) I chose to use Cloud Build because it already came integrated 
+with GCP and works automatically with Cloud Run, and again because it was the fastest to 
+set up and integrate.
 
 - To meet condition e. and keep all the containers synced 
 together, a Redis database is connected to the containers via a Serverless VPC 
 Access Connector. I chose Redis over Firebase because I didn't need 
-persistent storage, and the Access Connector was necessary to connect that to  
-the containers on Cloud Run as they all needed to be on the same VPC network.
+persistent storage, and the Access Connector was necessary to bridge between 
+Redis Memorystore and the containers.
 
 ***PIPELINE*** 
 
-- The pipeline is set up to run in a continuous integration manner, 
+- The pipeline is set up to run via continuous integration, 
 where the code is built, tested, and deployed to the test environment.
-
-- Then, automated and manual tests are run in the test environment, before
-being manually deployed to the production environment. I chose to make the 
-process of pushing into production manual as end-to-end automation can be 
-too brittle, and may not catch certain errors.
 
 - 100% of traffic is routed to new revisions in the test environment, since
 purpose of a test environment is to try and break and fix things. 
 
-- New revisions in the production environment start at 0% traffic, and need 
-to manually have traffic routed to them. This is in order to enable blue-green
-deployments, which may need different percentages of traffic going to the new 
-application in production.
+- Then, automated and manual tests are run in the test environment, before
+being automatically deployed to the production environment. I chose to make the 
+process of pushing into production automatic, as new revisions start at 0% traffic.
+
+- New revisions need to manually have traffic routed to them, as they start at 0%. 
+This is in order to enable blue-green deployments, which may need different 
+percentages of traffic going to the new application in production.
 
 ***BUILD PROCESS***
 
 ACCESS 
 1. Check whether you have received access to the project on GCP.
 
-SETTING UP GCP 
+SETTING UP 
 
-1. Install and initialize the GCP CLI 
+1. Check that you are on a Unix environment (macOS or Linux).
+
+2. Install and initialize the GCP CLI 
     https://cloud.google.com/sdk/docs/install
     
-
 INITIAL DEPLOYMENT INTO TEST ENVIRONMENT
 
-1. Set this project as default 
+1. Set this project as default. 
+
     gcloud config set project kiwibot-test-server-1
 
-2. Configure gcloud for your chosen region 
+2. Configure gcloud for your chosen region. 
+
     gcloud config set run/region us-central1
 
-3. Creating a Memorystore instance for Redis 
+3. Creating a Memorystore instance for Redis. 
+
     gcloud redis instances create redis-test --size=1 --region=us-central1
 
-4. Start a Serverless VPC Access Connector 
+4. Start a Serverless VPC Access Connector. 
+
     gcloud compute networks vpc-access connectors create connector-test \
   --region us-central1 \
   --range "10.8.0.0/28"
 
 5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
+
      export REDISHOST=$(gcloud redis instances describe redis-test --region us-central1 --format "value(host)")
 
 6. Create service account for service identity.
+
     gcloud iam service-accounts create chat-identity
 
 7. Navigate to the directory that holds the source code.
+
     cd ~/kiwibot-devops-test/service/
 
 8. Build and deploy.
+
     gcloud beta run deploy chat-app --source . \
     --vpc-connector connector-test \
     --allow-unauthenticated \
@@ -94,31 +102,39 @@ authorized network.
 
 INITIAL DEPLOYMENT INTO PRODUCTION ENVIRONMENT
 
-1. Set this project as default 
+1. Set this project as default. 
+
     gcloud config set project kiwibot-prod-server-1
 
-2. Configure gcloud for your chosen region 
+2. Configure gcloud for your chosen region. 
+
     gcloud config set run/region us-central1
 
-3. Creating a Memorystore instance for Redis 
+3. Creating a Memorystore instance for Redis. 
+
     gcloud redis instances create redis-prod --size=1 --region=us-central1
 
-4. Start a Serverless VPC Access Connector 
+4. Start a Serverless VPC Access Connector. 
+
     gcloud compute networks vpc-access connectors create connector-prod \
   --region us-central1 \
   --range "10.8.0.0/28"
 
 5. Define environment variable with the IP address of your Redis instance's 
 authorized network. 
+
      export REDISHOST=$(gcloud redis instances describe redis-prod --region us-central1 --format "value(host)")
 
 6. Create service account for service identity.
+
     gcloud iam service-accounts create chat-identity
 
 7. Navigate to the directory that holds the source code.
+
     cd ~/kiwibot-devops-test/service/
 
 8. Build and deploy.
+
     gcloud beta run deploy chat-app --source . \
     --vpc-connector connector-prod \
     --allow-unauthenticated \
@@ -128,43 +144,12 @@ authorized network.
 
     Note: Press Y on any steps or API installs that may be necessary 
 
-SUBSEQUENT DEPLOYMENT INTO TEST ENVIRONMENT
-
-1. Set this project as default 
-    gcloud config set project kiwibot-test-server-1
-
-2. Navigate inside the service directory.
-    cd ~/kiwibot-devops-test/service/
-
-3. Update and deploy.
-    gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-test \
-    --allow-unauthenticated \
-    --timeout 3600 \
-    --service-account chat-identity \
-    --update-env-vars REDISHOST=$REDISHOST
-
-SUBSEQUENT DEPLOYMENT INTO PRODUCTION ENVIRONMENT
-
-1. Set this project as default 
-    gcloud config set project kiwibot-prod-server-1
-
-2. Navigate inside the service directory.
-    cd ~/kiwibot-devops-test/service/
-
-3. Update and deploy.
-    gcloud beta run deploy chat-app --source . \
-    --vpc-connector connector-prod \
-    --allow-unauthenticated \
-    --timeout 3600 \
-    --service-account chat-identity \
-    --update-env-vars REDISHOST=$REDISHOST
-
-
 USING THE APPLICATION 
 
 1. Go to generated URL via your browser. 
+
     Production application - https://chat-app-3bnxmm5mca-uc.a.run.app
+
     Test application - https://chat-app-ebdboyjvgq-uc.a.run.app
 
 2. Add name and name of the room. 
@@ -183,7 +168,7 @@ the limit of projects on which I could enable it.
 
 - Access Connector refused to start from CLI for the test environment due to default 
 settings having too high of a cap for maximum instances and regional CPU quotas being
-exhausted, I had to set that up via the console initially.
+exhausted, I had to set that up via the console initially. That also took a while to fix.
 
 - The production application works fine, but the test application does not, as it gets
 stuck at the login screen. I'm unable to find out why so far, because as far as I can see, 

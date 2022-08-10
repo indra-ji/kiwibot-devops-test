@@ -30,12 +30,11 @@ I have worked with Git, Docker, and AWS previously.
     As an example, code would be developed and versioned in a dev branch using 
     Git, where it would then be merged to a test environment and automatically 
     tested using Jenkins. After passing automated tests, quality checks and 
-    syntax checks, containerized using Docker, then deployed on a test server on AWS. 
-    After passing QA checks, the test code would then be merged to a production environment,
-    containerized and then deployed on the production server.
-    If the workload increases, then Kubernetes can be used to scale the number 
-    of containers up and down. While the application code is running, a tool 
-    like Datadog can be used to monitor the performance of the cloud service.    
+    syntax checks, it would be containerized using Docker, then deployed on a 
+    test server on AWS. After passing QA checks, the test code would then be 
+    merged to a production environment, containerized and then deployed on the production server.
+    Kubernetes can be used to scale the number of containers up and down along with workload.
+    While the application code is running, a tool like Datadog can be used to monitor the performance of the cloud service.    
     
 3. What is the most important thing DevOps helps us achieve?
 
